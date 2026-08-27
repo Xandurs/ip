@@ -9,9 +9,8 @@ public class Joey {
 
         String line = "----------------------------------------";
         Scanner in = new Scanner(System.in); //build a scanner object that scans and read from system.in (keyboard)
-        String[] tasks = new String[100];
         int count = 0;
-        boolean[] isDone = new boolean[100];
+        Task[] tasks = new Task[100];
         
         System.out.println(line);
         System.out.println(banner);
@@ -32,31 +31,30 @@ public class Joey {
                 System.out.println(line);
                 System.out.println("To Do List:");
                 for(int i = 0; i < count; i++){
-                    String icon = isDone[i] ? "X" : " ";
-                    System.out.println(" " + (i + 1) + ".[" + icon + "] "  + tasks[i]);
+                    System.out.println(" " + (i + 1) + ".[" + tasks[i].getStatusIcon() + "] "  + tasks[i].getDescription());
                 }
                 System.out.println(line);
 
             }else if (words[0].equalsIgnoreCase("mark")){
                 int index = Integer.parseInt(words[1]) - 1;
-                isDone[index] = true;
+                tasks[index].markAsDone();
                 System.out.println(line);
                 System.out.println("Tasks marked as done:");
-                System.out.println(" [X] " + tasks[index]);
+                System.out.println("  [" + tasks[index].getStatusIcon() + "] " + tasks[index].getDescription());
                 System.out.println(line);
 
             }else if(words[0].equalsIgnoreCase("unmark")){
                 int index = Integer.parseInt(words[1]) - 1;
-                isDone[index] = false;
+                tasks[index].markAsNotDone();
                 System.out.println(line);
                 System.out.println("Tasks marked as undone:");
-                System.out.println(" [] " + tasks[index]);
+                System.out.println("  [" + tasks[index].getStatusIcon() + "] " + tasks[index].getDescription());
                 System.out.println(line);
 
 
 
             }else{
-                tasks[count] = command;
+                tasks[count] = new Task(command);
                 count++;
                 System.out.println(line);
                 System.out.println("added: " + command);
