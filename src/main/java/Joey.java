@@ -41,6 +41,9 @@ public class Joey {
                 int index = Integer.parseInt(words[1]) - 1;
                 isDone[index] = true;
 
+            }else if(words[0].equalsIgnoreCase("unmark")){
+                int index = Integer.parseInt(words[1]) - 1;
+                isDone[index] = false;
             }else{
                 tasks[count] = command;
                 count++;
