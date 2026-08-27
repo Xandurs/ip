@@ -9,6 +9,8 @@ public class Joey {
 
         String line = "----------------------------------------";
         Scanner in = new Scanner(System.in); //build a scanner object that scans and read from system.in (keyboard)
+        String[] tasks = new String[100];
+        int count = 0;
         
         System.out.println(line);
         System.out.println(banner);
@@ -24,10 +26,22 @@ public class Joey {
                 System.out.println(line);
                 break;
 
+            }else if (command.equalsIgnoreCase("list")){
+                System.out.println(line);
+                System.out.println("To Do List:");
+                for(int i = 0; i < count; i++){
+                    System.out.println(" " + (i + 1) + ". " + tasks[i]);
+                }
+                System.out.println(line);
+            }else{
+                tasks[count] = command;
+                count++;
+                System.out.println(line);
+                System.out.println("added: " + command);
+                System.out.println(line);
             }
-            System.out.println(line);
-            System.out.println(" " + command);
-            System.out.println(line);
+
+            
         }
         
     }
