@@ -40,10 +40,21 @@ public class Joey {
             }else if (words[0].equalsIgnoreCase("mark")){
                 int index = Integer.parseInt(words[1]) - 1;
                 isDone[index] = true;
+                System.out.println(line);
+                System.out.println("Tasks marked as done:");
+                System.out.println(" [X] " + tasks[index]);
+                System.out.println(line);
 
             }else if(words[0].equalsIgnoreCase("unmark")){
                 int index = Integer.parseInt(words[1]) - 1;
                 isDone[index] = false;
+                System.out.println(line);
+                System.out.println("Tasks marked as undone:");
+                System.out.println(" [] " + tasks[index]);
+                System.out.println(line);
+
+
+
             }else{
                 tasks[count] = command;
                 count++;
