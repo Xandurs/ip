@@ -137,15 +137,42 @@ public class Joey {
             return new Todo(details);
         } else if (type.equals("deadline")) {
             int byIndex = details.indexOf("/by");
+            if (byIndex == -1) {
+                throw new JoeyException("Sorry, you need a /by input Please try again.");
+            }
             String description = details.substring(0, byIndex).trim();
             String by = details.substring(byIndex + "/by".length()).trim();
+            if (description.isEmpty()) {
+                throw new JoeyException("Sorry, your description is missing. Please try again.");
+            }
+            if (by.isEmpty()) {
+                throw new JoeyException("Sorry, when is your task due?");
+            }
             return new Deadline(description, by);
         } else {
             int fromIndex = details.indexOf("/from");
             int toIndex = details.indexOf("/to");
+            if (fromIndex == -1) {
+                throw new JoeyException("Sorry, you need a /from input. Please try again.");
+            }
+            if (toIndex == -1) {
+                throw new JoeyException("Sorry, you need a /to input. Please try again. ");
+            }
+            if (fromIndex > toIndex) {
+                throw new JoeyException("/from must come before /to. Please try again.");
+            }
             String description = details.substring(0, fromIndex).trim();
             String from = details.substring(fromIndex + "/from".length(), toIndex).trim();
             String to = details.substring(toIndex + "/to".length()).trim();
+            if (description.isEmpty()) {
+                throw new JoeyException("Sorry, your description is missing. Please try again.");
+            }
+            if (from.isEmpty()) {
+                throw new JoeyException("Sorry, your start time is missing. Please try again.");
+            }
+            if (to.isEmpty()) {
+                throw new JoeyException("Sorry, your end time is missing. Please try again.");
+            }
             return new Event(description, from, to);
         }
     }
