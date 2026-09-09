@@ -1,4 +1,10 @@
+package seedu.joey;
 import java.util.Scanner;
+import seedu.joey.task.Task;
+import seedu.joey.task.Todo;
+import seedu.joey.task.Deadline;
+import seedu.joey.task.Event;
+
 
 public class Joey {
     private static final int MAX_TASKS = 100;

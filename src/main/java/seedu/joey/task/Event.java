@@ -1,3 +1,5 @@
+package seedu.joey.task;
+
 /**
  * Represents a task that starts at a specific date or time
  * and ends at a specific date or time.
