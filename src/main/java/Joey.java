@@ -2,79 +2,124 @@ import java.util.Scanner;
 
 public class Joey {
     private static final int MAX_TASKS = 100;
+    private static final String LINE = "----------------------------------------";
+    private static final String BANNER = "     _  ___  _______   __\n"
+            + "    | |/ _ \\| ____\\ \\ / /\n"
+            + " _  | | | | |  _|  \\ V / \n"
+            + "| |_| | |_| | |___  | |  \n"
+            + " \\___/ \\___/|_____| |_|  \n";
+
+    private static final Task[] tasks = new Task[MAX_TASKS];
+    private static int count = 0;
 
     public static void main(String[] args) {
-        String banner = "     _  ___  _______   __\n"
-                + "    | |/ _ \\| ____\\ \\ / /\n"
-                + " _  | | | | |  _|  \\ V / \n"
-                + "| |_| | |_| | |___  | |  \n"
-                + " \\___/ \\___/|_____| |_|  \n";
-        String line = "----------------------------------------";
-
-        // build a scanner object that scans and read from system.in (keyboard)
         Scanner in = new Scanner(System.in);
-        Task[] tasks = new Task[MAX_TASKS];
-        int count = 0;
-
-        System.out.println(line);
-        System.out.println(banner);
-        System.out.println("Hello! I'm Joey");
-        System.out.println("What can I do for you?");
-        System.out.println(line);
+        printWelcome();
 
         while (true) {
             String command = in.nextLine().trim();
-            String[] words = command.split(" ");
-
             if (command.equalsIgnoreCase("bye")) {
-                System.out.println(line);
-                System.out.println("Bye. Hope to see you again soon!");
-                System.out.println(line);
+                printGoodbye();
                 break;
-
-            } else if (command.equalsIgnoreCase("list")) {
-                System.out.println(line);
-                System.out.println("To Do List:");
-                for (int i = 0; i < count; i++) {
-                    System.out.println(" " + (i + 1) + "." + tasks[i]);
-                }
-                System.out.println(line);
-
-            } else if (words[0].equalsIgnoreCase("mark")) {
-                int index = Integer.parseInt(words[1]) - 1;
-                tasks[index].markAsDone();
-                System.out.println(line);
-                System.out.println("Tasks marked as done:");
-                System.out.println("  " + tasks[index]);
-                System.out.println(line);
-
-            } else if (words[0].equalsIgnoreCase("unmark")) {
-                int index = Integer.parseInt(words[1]) - 1;
-                tasks[index].markAsNotDone();
-                System.out.println(line);
-                System.out.println("Tasks marked as undone:");
-                System.out.println("  " + tasks[index]);
-                System.out.println(line);
-
-            } else if (words[0].equalsIgnoreCase("todo")
-                    || words[0].equalsIgnoreCase("deadline")
-                    || words[0].equalsIgnoreCase("event")) {
-                tasks[count] = createTask(command);
-                count++;
-                System.out.println(line);
-                System.out.println("Got it. I've added this task:");
-                System.out.println("  " + tasks[count - 1]);
-                System.out.println("Now you have " + count + " tasks in the list.");
-                System.out.println(line);
-
-            } else {
-                tasks[count] = new Task(command);
-                count++;
-                System.out.println(line);
-                System.out.println("added: " + command);
-                System.out.println(line);
             }
+            handleCommand(command);
         }
+    }
+
+    /**
+     * Dispatches a single user command to the matching handler.
+     *
+     * @param command The full command line entered by the user.
+     */
+    private static void handleCommand(String command) {
+        String[] words = command.split(" ");
+        String keyword = words[0].toLowerCase();
+
+        switch (keyword) {
+        case "list":
+            printList();
+            break;
+        case "mark":
+            markTask(Integer.parseInt(words[1]) - 1);
+            break;
+        case "unmark":
+            unmarkTask(Integer.parseInt(words[1]) - 1);
+            break;
+        case "todo":
+        case "deadline":
+        case "event":
+            addTypedTask(command);
+            break;
+        default:
+            addGenericTask(command);
+            break;
+        }
+    }
+
+    private static void printWelcome() {
+        System.out.println(LINE);
+        System.out.println(BANNER);
+        System.out.println("Hello! I'm Joey");
+        System.out.println("What can I do for you?");
+        System.out.println(LINE);
+    }
+
+    private static void printGoodbye() {
+        System.out.println(LINE);
+        System.out.println("Bye. Hope to see you again soon!");
+        System.out.println(LINE);
+    }
+
+    private static void printList() {
+        System.out.println(LINE);
+        System.out.println("To Do List:");
+        for (int i = 0; i < count; i++) {
+            System.out.println(" " + (i + 1) + "." + tasks[i]);
+        }
+        System.out.println(LINE);
+    }
+
+    private static void markTask(int index) {
+        tasks[index].markAsDone();
+        System.out.println(LINE);
+        System.out.println("Tasks marked as done:");
+        System.out.println("  " + tasks[index]);
+        System.out.println(LINE);
+    }
+
+    private static void unmarkTask(int index) {
+        tasks[index].markAsNotDone();
+        System.out.println(LINE);
+        System.out.println("Tasks marked as undone:");
+        System.out.println("  " + tasks[index]);
+        System.out.println(LINE);
+    }
+
+    /**
+     * Adds a typed task (todo/deadline/event) parsed from the command,
+     * then prints the standard confirmation block.
+     */
+    private static void addTypedTask(String command) {
+        Task task = createTask(command);
+        tasks[count] = task;
+        count++;
+        System.out.println(LINE);
+        System.out.println("Got it. I've added this task:");
+        System.out.println("  " + task);
+        System.out.println("Now you have " + count + " tasks in the list.");
+        System.out.println(LINE);
+    }
+
+    /**
+     * Adds a generic (untyped) task using the raw command as its description.
+     * Preserves the legacy "added: ..." acknowledgement from earlier levels.
+     */
+    private static void addGenericTask(String command) {
+        tasks[count] = new Task(command);
+        count++;
+        System.out.println(LINE);
+        System.out.println("added: " + command);
+        System.out.println(LINE);
     }
 
     /**
