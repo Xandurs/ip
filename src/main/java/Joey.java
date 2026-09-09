@@ -35,7 +35,8 @@ public class Joey {
         String[] words = command.split(" ");
         String keyword = words[0].toLowerCase();
 
-        switch (keyword) {
+        try {
+            switch (keyword) {
         case "list":
             printList();
             break;
@@ -51,9 +52,15 @@ public class Joey {
             addTypedTask(command);
             break;
         default:
-            addGenericTask(command);
-            break;
+            throw new JoeyException("Sorry, I don't recognise that command.");
+            }
+        } catch (JoeyException e) {
+            System.out.println(LINE);
+            System.out.println(e.getMessage());
+            System.out.println(LINE);
         }
+       
+        
     }
 
     private static void printWelcome() {
@@ -99,7 +106,7 @@ public class Joey {
      * Adds a typed task (todo/deadline/event) parsed from the command,
      * then prints the standard confirmation block.
      */
-    private static void addTypedTask(String command) {
+    private static void addTypedTask(String command) throws JoeyException {
         Task task = createTask(command);
         tasks[count] = task;
         count++;
@@ -110,27 +117,20 @@ public class Joey {
         System.out.println(LINE);
     }
 
-    /**
-     * Adds a generic (untyped) task using the raw command as its description.
-     * Preserves the legacy "added: ..." acknowledgement from earlier levels.
-     */
-    private static void addGenericTask(String command) {
-        tasks[count] = new Task(command);
-        count++;
-        System.out.println(LINE);
-        System.out.println("added: " + command);
-        System.out.println(LINE);
-    }
-
+    
     /**
      * Creates a task of the type specified by the first word of the command.
      *
      * @param command The full command entered by the user.
      * @return A Todo, Deadline or Event built from the given command.
      */
-    private static Task createTask(String command) {
+    private static Task createTask(String command) throws JoeyException {
         String[] parts = command.split(" ", 2);
         String type = parts[0].toLowerCase();
+
+        if (parts.length < 2 || parts[1].trim().isEmpty()) {
+            throw new JoeyException("Hmm, that " + type + " is missing a description. Please try again.");
+        }
         String details = parts[1].trim();
 
         if (type.equals("todo")) {
