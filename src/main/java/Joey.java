@@ -35,15 +35,16 @@ public class Joey {
         String[] words = command.split(" ");
         String keyword = words[0].toLowerCase();
 
-        switch (keyword) {
+        try {
+            switch (keyword) {
         case "list":
             printList();
             break;
         case "mark":
-            markTask(Integer.parseInt(words[1]) - 1);
+            markTask(parseTaskIndex(words));
             break;
         case "unmark":
-            unmarkTask(Integer.parseInt(words[1]) - 1);
+            unmarkTask(parseTaskIndex(words));
             break;
         case "todo":
         case "deadline":
@@ -51,9 +52,15 @@ public class Joey {
             addTypedTask(command);
             break;
         default:
-            addGenericTask(command);
-            break;
+            throw new JoeyException("Sorry, I don't recognise that command.");
+            }
+        } catch (JoeyException e) {
+            System.out.println(LINE);
+            System.out.println(e.getMessage());
+            System.out.println(LINE);
         }
+       
+        
     }
 
     private static void printWelcome() {
@@ -79,6 +86,22 @@ public class Joey {
         System.out.println(LINE);
     }
 
+    private static int parseTaskIndex(String[] words) throws JoeyException {
+        if (words.length < 2 ) {
+            throw new JoeyException("Sorry, task number is missing. Please try again");
+        }
+        int index;
+        try {
+            index = Integer.parseInt(words[1]) - 1;
+        } catch (NumberFormatException e) {
+            throw new JoeyException(words[1] + " is not a number. Please try again. ");
+        }
+        if (index < 0 || index >= count) {
+            throw new JoeyException("Sorry. There is no task with that number. Please try again.");
+        }
+        return index;
+    }
+
     private static void markTask(int index) {
         tasks[index].markAsDone();
         System.out.println(LINE);
@@ -99,7 +122,7 @@ public class Joey {
      * Adds a typed task (todo/deadline/event) parsed from the command,
      * then prints the standard confirmation block.
      */
-    private static void addTypedTask(String command) {
+    private static void addTypedTask(String command) throws JoeyException {
         Task task = createTask(command);
         tasks[count] = task;
         count++;
@@ -110,42 +133,62 @@ public class Joey {
         System.out.println(LINE);
     }
 
-    /**
-     * Adds a generic (untyped) task using the raw command as its description.
-     * Preserves the legacy "added: ..." acknowledgement from earlier levels.
-     */
-    private static void addGenericTask(String command) {
-        tasks[count] = new Task(command);
-        count++;
-        System.out.println(LINE);
-        System.out.println("added: " + command);
-        System.out.println(LINE);
-    }
-
+    
     /**
      * Creates a task of the type specified by the first word of the command.
      *
      * @param command The full command entered by the user.
      * @return A Todo, Deadline or Event built from the given command.
      */
-    private static Task createTask(String command) {
+    private static Task createTask(String command) throws JoeyException {
         String[] parts = command.split(" ", 2);
         String type = parts[0].toLowerCase();
+
+        if (parts.length < 2 || parts[1].trim().isEmpty()) {
+            throw new JoeyException("Hmm, that " + type + " is missing a description. Please try again.");
+        }
         String details = parts[1].trim();
 
         if (type.equals("todo")) {
             return new Todo(details);
         } else if (type.equals("deadline")) {
             int byIndex = details.indexOf("/by");
+            if (byIndex == -1) {
+                throw new JoeyException("Sorry, you need a /by input Please try again.");
+            }
             String description = details.substring(0, byIndex).trim();
             String by = details.substring(byIndex + "/by".length()).trim();
+            if (description.isEmpty()) {
+                throw new JoeyException("Sorry, your description is missing. Please try again.");
+            }
+            if (by.isEmpty()) {
+                throw new JoeyException("Sorry, when is your task due?");
+            }
             return new Deadline(description, by);
         } else {
             int fromIndex = details.indexOf("/from");
             int toIndex = details.indexOf("/to");
+            if (fromIndex == -1) {
+                throw new JoeyException("Sorry, you need a /from input. Please try again.");
+            }
+            if (toIndex == -1) {
+                throw new JoeyException("Sorry, you need a /to input. Please try again. ");
+            }
+            if (fromIndex > toIndex) {
+                throw new JoeyException("/from must come before /to. Please try again.");
+            }
             String description = details.substring(0, fromIndex).trim();
             String from = details.substring(fromIndex + "/from".length(), toIndex).trim();
             String to = details.substring(toIndex + "/to".length()).trim();
+            if (description.isEmpty()) {
+                throw new JoeyException("Sorry, your description is missing. Please try again.");
+            }
+            if (from.isEmpty()) {
+                throw new JoeyException("Sorry, your start time is missing. Please try again.");
+            }
+            if (to.isEmpty()) {
+                throw new JoeyException("Sorry, your end time is missing. Please try again.");
+            }
             return new Event(description, from, to);
         }
     }
