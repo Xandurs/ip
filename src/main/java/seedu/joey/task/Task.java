@@ -1,3 +1,5 @@
+package seedu.joey.task;
+
 /**
  * Represents a task in the task list.
  * A task has a description and a status indicating whether it is done.
