@@ -41,10 +41,10 @@ public class Joey {
             printList();
             break;
         case "mark":
-            markTask(Integer.parseInt(words[1]) - 1);
+            markTask(parseTaskIndex(words));
             break;
         case "unmark":
-            unmarkTask(Integer.parseInt(words[1]) - 1);
+            unmarkTask(parseTaskIndex(words));
             break;
         case "todo":
         case "deadline":
@@ -84,6 +84,22 @@ public class Joey {
             System.out.println(" " + (i + 1) + "." + tasks[i]);
         }
         System.out.println(LINE);
+    }
+
+    private static int parseTaskIndex(String[] words) throws JoeyException {
+        if (words.length < 2 ) {
+            throw new JoeyException("Sorry, task number is missing. Please try again");
+        }
+        int index;
+        try {
+            index = Integer.parseInt(words[1]) - 1;
+        } catch (NumberFormatException e) {
+            throw new JoeyException(words[1] + " is not a number. Please try again. ");
+        }
+        if (index < 0 || index >= count) {
+            throw new JoeyException("Sorry. There is no task with that number. Please try again.");
+        }
+        return index;
     }
 
     private static void markTask(int index) {
