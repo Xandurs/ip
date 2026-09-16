@@ -51,6 +51,9 @@ public class Joey {
         case "unmark":
             unmarkTask(parseTaskIndex(words));
             break;
+        case "delete":
+            deleteTask(parseTaskIndex(words));
+            break;
         case "todo":
         case "deadline":
         case "event":
@@ -120,6 +123,19 @@ public class Joey {
         System.out.println(LINE);
         System.out.println("Tasks marked as undone:");
         System.out.println("  " + tasks.get(index));
+        System.out.println(LINE);
+    }
+
+    /**
+     * Removes the task at the given index and reports what was removed
+     * @param index Xero-based index of the task to delete 
+     */
+    private static void deleteTask(int index) {
+        Task removed = tasks.remove(index);
+        System.out.println(LINE);
+        System.out.println("Okay. I've removed this task");
+        System.out.println(" " + removed);
+        System.out.println("Now you have " + tasks.size() + " tasks in the list");
         System.out.println(LINE);
     }
 
