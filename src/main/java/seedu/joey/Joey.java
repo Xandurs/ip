@@ -19,6 +19,7 @@ public class Joey {
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
+        tasks = Storage.load();
         printWelcome();
 
         while (true) {
@@ -130,6 +131,7 @@ public class Joey {
     private static void addTypedTask(String command) throws JoeyException {
         Task task = createTask(command);
         tasks.add(task);
+        Storage.save(tasks);
         
         System.out.println(LINE);
         System.out.println("Got it. I've added this task:");
@@ -137,6 +139,8 @@ public class Joey {
         System.out.println("Now you have " + tasks.size() + " tasks in the list.");
         System.out.println(LINE);
     }
+
+    
 
     
     /**
