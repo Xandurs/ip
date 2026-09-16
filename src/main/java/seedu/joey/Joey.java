@@ -4,10 +4,10 @@ import seedu.joey.task.Task;
 import seedu.joey.task.Todo;
 import seedu.joey.task.Deadline;
 import seedu.joey.task.Event;
+import java.util.ArrayList;
 
 
 public class Joey {
-    private static final int MAX_TASKS = 100;
     private static final String LINE = "----------------------------------------";
     private static final String BANNER = "     _  ___  _______   __\n"
             + "    | |/ _ \\| ____\\ \\ / /\n"
@@ -15,8 +15,7 @@ public class Joey {
             + "| |_| | |_| | |___  | |  \n"
             + " \\___/ \\___/|_____| |_|  \n";
 
-    private static final Task[] tasks = new Task[MAX_TASKS];
-    private static int count = 0;
+    private static ArrayList<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -86,8 +85,8 @@ public class Joey {
     private static void printList() {
         System.out.println(LINE);
         System.out.println("To Do List:");
-        for (int i = 0; i < count; i++) {
-            System.out.println(" " + (i + 1) + "." + tasks[i]);
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println(" " + (i + 1) + "." + tasks.get(i));
         }
         System.out.println(LINE);
     }
@@ -102,25 +101,25 @@ public class Joey {
         } catch (NumberFormatException e) {
             throw new JoeyException(words[1] + " is not a number. Please try again. ");
         }
-        if (index < 0 || index >= count) {
+        if (index < 0 || index >= tasks.size()) {
             throw new JoeyException("Sorry. There is no task with that number. Please try again.");
         }
         return index;
     }
 
     private static void markTask(int index) {
-        tasks[index].markAsDone();
+        tasks.get(index).markAsDone();
         System.out.println(LINE);
         System.out.println("Tasks marked as done:");
-        System.out.println("  " + tasks[index]);
+        System.out.println("  " + tasks.get(index));
         System.out.println(LINE);
     }
 
     private static void unmarkTask(int index) {
-        tasks[index].markAsNotDone();
+        tasks.get(index).markAsNotDone();
         System.out.println(LINE);
         System.out.println("Tasks marked as undone:");
-        System.out.println("  " + tasks[index]);
+        System.out.println("  " + tasks.get(index));
         System.out.println(LINE);
     }
 
@@ -130,12 +129,12 @@ public class Joey {
      */
     private static void addTypedTask(String command) throws JoeyException {
         Task task = createTask(command);
-        tasks[count] = task;
-        count++;
+        tasks.add(task);
+        
         System.out.println(LINE);
         System.out.println("Got it. I've added this task:");
         System.out.println("  " + task);
-        System.out.println("Now you have " + count + " tasks in the list.");
+        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
         System.out.println(LINE);
     }
 
