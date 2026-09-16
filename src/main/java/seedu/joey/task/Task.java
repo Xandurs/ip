@@ -59,4 +59,12 @@ public class Task {
     public String toString() {
         return "[" + getTypeIcon() + "][" + getStatusIcon() + "] " + description;
     }
+
+    /**
+     * Returns the reporesntation of this task used in the save file
+     * in the for TYPE | DONE | DESCRIPTION 
+     */
+    public String toFileFormat() {
+        return getTypeIcon() + " | " + (isDone ? "1" : "0") + " | " + description;
+    }
 }
