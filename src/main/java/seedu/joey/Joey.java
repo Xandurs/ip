@@ -133,6 +133,7 @@ public class Joey {
      */
     private static void deleteTask(int index) {
         Task removed = tasks.remove(index);
+        Storage.save(tasks);
         System.out.println(LINE);
         System.out.println("Okay. I've removed this task");
         System.out.println(" " + removed);
