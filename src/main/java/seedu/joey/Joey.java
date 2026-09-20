@@ -47,6 +47,9 @@ public class Joey {
             case "event":
                 addTypedTask(command);
                 break;
+            case "find":
+                ui.showFindResults(tasks.find(Parser.parseKeyword(command)));
+                break;
             default:
                 throw new JoeyException("Sorry, I don't recognise that command.");
             }

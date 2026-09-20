@@ -1,5 +1,6 @@
 package seedu.joey;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import seedu.joey.task.Task;
 /**
@@ -35,4 +36,20 @@ public class TaskList {
     public ArrayList<Task> getTasks() {
         return tasks;
     }
+
+    /**
+     * Returns a new TaskList containing only tasks whose description
+     * contains the given keyword (case-insensitive substring match).
+     */
+    public TaskList find(String keyword) {
+        ArrayList<Task> matches = new ArrayList<>();
+        String needle = keyword.toLowerCase();
+        for (Task t : tasks) {
+            if (t.getDescription().toLowerCase().contains(needle)) {
+                matches.add(t);
+            }
+        }
+        return new TaskList(matches);
+    }
+
 }

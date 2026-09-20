@@ -105,5 +105,16 @@ public class Parser {
 
     }
 
+    /**
+     * returns the search keyword after "find". throws if missing
+     */
+    public static String parseKeyword(String command) throws JoeyException {
+        String[] parts = command.split(" ", 2);
+        if (parts.length < 2 || parts[1].trim().isEmpty()) {
+            throw new JoeyException("Please give me a keyword to find. ");
+        }
+        return parts[1].trim();
+    }
+
 }
 
