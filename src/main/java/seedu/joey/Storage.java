@@ -3,8 +3,11 @@ package seedu.joey;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.zip.DataFormatException;
 
 import seedu.joey.task.Deadline;
 import seedu.joey.task.Event;
@@ -85,7 +88,11 @@ public class Storage {
                 if (parts.length < 4) {
                     return reportCorruptedLine(line);
                 }
-                task = new Deadline(description, parts[3]);
+                try {
+                    task = new Deadline(description, LocalDate.parse(parts[3]));
+                } catch (DateTimeParseException e) {
+                    return reportCorruptedLine(line);
+                }
                 break;
             case "E":
                 if (parts.length < 5) {

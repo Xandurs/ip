@@ -1,5 +1,7 @@
 package seedu.joey;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import seedu.joey.task.Deadline;
 import seedu.joey.task.Event;
 import seedu.joey.task.Task;
@@ -66,7 +68,13 @@ public class Parser {
             if (by.isEmpty()) {
                 throw new JoeyException("Sorry, when is your task due?");
             }
-            return new Deadline(description, by);
+            LocalDate byDate;
+            try {
+                byDate = LocalDate.parse(by);
+            } catch (DateTimeParseException e) {
+                throw new JoeyException("Sorry, use yyyy-mm-dd for the date (e.g. 2019-10-15). Please try again.");
+            }
+            return new Deadline(description, byDate);
         } else {
             int fromIndex = details.indexOf("/from");
             int toIndex = details.indexOf("/to");
