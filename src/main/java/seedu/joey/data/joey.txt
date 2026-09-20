@@ -1,2 +1,4 @@
-T | 0 | cs2113 assignmetn /by 12sep 2359
-E | 0 | NUS carrer fair | 12 sep 12pm | 3pm
+D | 0 | submit form | 2026-09-30
+T | 0 | read book
+D | 0 | return book | 2019-06-06
+T | 0 | buy groceries
