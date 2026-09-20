@@ -8,24 +8,18 @@ import java.util.ArrayList;
 
 
 public class Joey {
-    private static final String LINE = "----------------------------------------";
-    private static final String BANNER = "     _  ___  _______   __\n"
-            + "    | |/ _ \\| ____\\ \\ / /\n"
-            + " _  | | | | |  _|  \\ V / \n"
-            + "| |_| | |_| | |___  | |  \n"
-            + " \\___/ \\___/|_____| |_|  \n";
-
+    private static Ui ui = new Ui();
     private static TaskList tasks = new TaskList();
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         tasks = new TaskList(Storage.load());
-        printWelcome();
+        ui.showWelcome();
 
         while (true) {
-            String command = in.nextLine().trim();
+            String command = ui.readCommand();
             if (command.equalsIgnoreCase("bye")) {
-                printGoodbye();
+                ui.showGoodbye();
                 break;
             }
             handleCommand(command);
@@ -44,7 +38,7 @@ public class Joey {
         try {
             switch (keyword) {
         case "list":
-            printList();
+            ui.showTaskList(tasks);
             break;
         case "mark":
             markTask(parseTaskIndex(words));
@@ -64,36 +58,12 @@ public class Joey {
             throw new JoeyException("Sorry, I don't recognise that command.");
             }
         } catch (JoeyException e) {
-            System.out.println(LINE);
-            System.out.println(e.getMessage());
-            System.out.println(LINE);
+            ui.showError(e.getMessage());
         }
        
         
     }
 
-    private static void printWelcome() {
-        System.out.println(LINE);
-        System.out.println(BANNER);
-        System.out.println("Hello! I'm Joey");
-        System.out.println("What can I do for you?");
-        System.out.println(LINE);
-    }
-
-    private static void printGoodbye() {
-        System.out.println(LINE);
-        System.out.println("Bye. Hope to see you again soon!");
-        System.out.println(LINE);
-    }
-
-    private static void printList() {
-        System.out.println(LINE);
-        System.out.println("To Do List:");
-        for (int i = 0; i < tasks.size(); i++) {
-            System.out.println(" " + (i + 1) + "." + tasks.get(i));
-        }
-        System.out.println(LINE);
-    }
 
     private static int parseTaskIndex(String[] words) throws JoeyException {
         if (words.length < 2 ) {
@@ -113,18 +83,12 @@ public class Joey {
 
     private static void markTask(int index) {
         tasks.get(index).markAsDone();
-        System.out.println(LINE);
-        System.out.println("Tasks marked as done:");
-        System.out.println("  " + tasks.get(index));
-        System.out.println(LINE);
+        ui.showMarked(tasks.get(index));
     }
 
     private static void unmarkTask(int index) {
         tasks.get(index).markAsNotDone();
-        System.out.println(LINE);
-        System.out.println("Tasks marked as undone:");
-        System.out.println("  " + tasks.get(index));
-        System.out.println(LINE);
+        ui.showUnmarked(tasks.get(index));
     }
 
     /**
@@ -134,11 +98,7 @@ public class Joey {
     private static void deleteTask(int index) {
         Task removed = tasks.delete(index);
         Storage.save(tasks.getTasks());
-        System.out.println(LINE);
-        System.out.println("Okay. I've removed this task");
-        System.out.println(" " + removed);
-        System.out.println("Now you have " + tasks.size() + " tasks in the list");
-        System.out.println(LINE);
+        ui.showRemoved(removed, tasks.size());
     }
 
     /**
@@ -150,11 +110,7 @@ public class Joey {
         tasks.add(task);
         Storage.save(tasks.getTasks());
         
-        System.out.println(LINE);
-        System.out.println("Got it. I've added this task:");
-        System.out.println("  " + task);
-        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-        System.out.println(LINE);
+        ui.showAdded(task, tasks.size());
     }
 
     
