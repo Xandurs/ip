@@ -15,11 +15,11 @@ public class Joey {
             + "| |_| | |_| | |___  | |  \n"
             + " \\___/ \\___/|_____| |_|  \n";
 
-    private static ArrayList<Task> tasks = new ArrayList<>();
+    private static TaskList tasks = new TaskList();
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        tasks = Storage.load();
+        tasks = new TaskList(Storage.load());
         printWelcome();
 
         while (true) {
@@ -132,8 +132,8 @@ public class Joey {
      * @param index Xero-based index of the task to delete 
      */
     private static void deleteTask(int index) {
-        Task removed = tasks.remove(index);
-        Storage.save(tasks);
+        Task removed = tasks.delete(index);
+        Storage.save(tasks.getTasks());
         System.out.println(LINE);
         System.out.println("Okay. I've removed this task");
         System.out.println(" " + removed);
@@ -148,7 +148,7 @@ public class Joey {
     private static void addTypedTask(String command) throws JoeyException {
         Task task = createTask(command);
         tasks.add(task);
-        Storage.save(tasks);
+        Storage.save(tasks.getTasks());
         
         System.out.println(LINE);
         System.out.println("Got it. I've added this task:");
