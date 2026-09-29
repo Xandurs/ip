@@ -2,10 +2,21 @@ package seedu.joey;
 
 import seedu.joey.task.Task;
 
+/**
+ * Entry point of the Joey chatbot.
+ * Wires the UI, storage and task list together and runs the
+ * main command loop until the user types "bye".
+ */
 public class Joey {
     private static Ui ui = new Ui();
     private static TaskList tasks = new TaskList();
 
+    /**
+     * Launches the chatbot: loads any saved tasks, prints the welcome
+     * banner and reads user commands until the user types "bye".
+     *
+     * @param args Command-line arguments (unused).
+     */
     public static void main(String[] args) {
         tasks = new TaskList(Storage.load());
         ui.showWelcome();
@@ -58,11 +69,21 @@ public class Joey {
         }
     }
 
+    /**
+     * Marks the task at the given index as done and shows the confirmation.
+     *
+     * @param index Zero-based index of the task to mark as done.
+     */
     private static void markTask(int index) {
         tasks.get(index).markAsDone();
         ui.showMarked(tasks.get(index));
     }
 
+    /**
+     * Marks the task at the given index as not done and shows the confirmation.
+     *
+     * @param index Zero-based index of the task to mark as not done.
+     */
     private static void unmarkTask(int index) {
         tasks.get(index).markAsNotDone();
         ui.showUnmarked(tasks.get(index));
