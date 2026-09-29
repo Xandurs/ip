@@ -8,6 +8,12 @@ public class Task {
     protected String description;
     protected boolean isDone;
 
+    /**
+     * Creates a new task with the given description. Newly created tasks
+     * start out as not done.
+     *
+     * @param description Human-readable description of the task.
+     */
     public Task(String description) {
         this.description = description;
         this.isDone = false;
@@ -31,6 +37,11 @@ public class Task {
         return " ";
     }
 
+    /**
+     * Returns the description of this task.
+     *
+     * @return The task description.
+     */
     public String getDescription() {
         return description;
     }
@@ -61,8 +72,10 @@ public class Task {
     }
 
     /**
-     * Returns the reporesntation of this task used in the save file
-     * in the for TYPE | DONE | DESCRIPTION 
+     * Returns the representation of this task used in the save file,
+     * in the form {@code TYPE | DONE | DESCRIPTION}.
+     *
+     * @return The pipe-delimited save-file line for this task.
      */
     public String toFileFormat() {
         return getTypeIcon() + " | " + (isDone ? "1" : "0") + " | " + description;

@@ -14,16 +14,20 @@ import seedu.joey.task.Event;
 import seedu.joey.task.Task;
 import seedu.joey.task.Todo;
 /**
- * Loads task from, and saves taks to, a text file on the hard disk.
+ * Loads tasks from, and saves tasks to, a text file on the hard disk.
+ * The save file lives at {@code data/joey.txt} relative to the current
+ * working directory and uses the format
+ * {@code TYPE | DONE | DESCRIPTION [| extra fields]}.
  */
 public class Storage {
     private static final String FOLDER_PATH = "data";
     private static final String FILE_PATH = FOLDER_PATH + File.separator + "joey.txt";
 
     /**
-     * reads the saved tasks from disk
-     * 
-     * returns the saved tasks, or an empty list if there is no save file yet
+     * Reads the saved tasks from disk.
+     *
+     * @return The saved tasks, or an empty list if there is no save file yet
+     *         or the file cannot be read.
      */
     public static ArrayList<Task> load() {
         ArrayList<Task> tasks = new ArrayList<>();
@@ -68,8 +72,12 @@ public class Storage {
     }
 
     /**
-     * Converts one line in the form TYPE | DONE | DESCRIPTION of the save file back into a Task
-     * return the reconstructed task, or null if the line is unreadable
+     * Converts one line of the save file back into a Task.
+     * The line is expected in the form
+     * {@code TYPE | DONE | DESCRIPTION [| extra fields]}.
+     *
+     * @param line A single line read from the save file.
+     * @return The reconstructed task, or {@code null} if the line is unreadable.
      */
     private static Task parseLine(String line) {
         String[] parts = line.split("\\s*\\|\\s*");

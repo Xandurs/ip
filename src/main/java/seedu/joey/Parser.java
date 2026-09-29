@@ -7,22 +7,30 @@ import seedu.joey.task.Event;
 import seedu.joey.task.Task;
 import seedu.joey.task.Todo;
 /**
- * Makes sense of the user's input by extrracting keywords, task indices,
+ * Makes sense of the user's input by extracting keywords, task indices,
  * and building Task objects from typed commands.
  */
 public class Parser {
     /**
-     * returns the first word of the command in lowercase
+     * Returns the first word of the command in lowercase, used as the
+     * command keyword by the main dispatcher.
+     *
+     * @param command The full command line entered by the user.
+     * @return The first word of the command, lowercased.
      */
     public static String getKeyword(String command) {
         return command.split(" ")[0].toLowerCase();
     }
 
     /**
-     * Parses the 1-based task number from the command retunrs it as a 0-based
-     * 
-     * @param command the full command line (e.g. "mark 2").
-     * @param listSize the current size of the task list for bounds checking.
+     * Parses the 1-based task number from the command and returns it as a
+     * 0-based index into the task list.
+     *
+     * @param command  The full command line (e.g. "mark 2").
+     * @param listSize The current size of the task list, used for bounds checking.
+     * @return The 0-based task index.
+     * @throws JoeyException If the task number is missing, not a number,
+     *                       or out of range.
      */
     public static int parseTaskIndex(String command, int listSize) throws JoeyException {
         String[] words = command.split(" ");
@@ -42,7 +50,13 @@ public class Parser {
     }
 
     /**
-     * Builds a Todo, Deadline or event from the commad 
+     * Builds a Todo, Deadline or Event from the given command. The command
+     * type (todo/deadline/event) is inferred from its first word.
+     *
+     * @param command The full command line (e.g. "deadline return book /by 2019-10-15").
+     * @return A newly created Task matching the requested type.
+     * @throws JoeyException If the description or any required date/time
+     *                       component is missing or malformed.
      */
     public static Task parseTask(String command) throws JoeyException {
         String[] parts = command.split(" ", 2);
@@ -106,7 +120,11 @@ public class Parser {
     }
 
     /**
-     * returns the search keyword after "find". throws if missing
+     * Returns the search keyword that follows the "find" command.
+     *
+     * @param command The full command line (e.g. "find book").
+     * @return The keyword to search for, trimmed of whitespace.
+     * @throws JoeyException If no keyword is supplied after "find".
      */
     public static String parseKeyword(String command) throws JoeyException {
         String[] parts = command.split(" ", 2);
