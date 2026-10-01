@@ -11,7 +11,7 @@ time you launch him.
 - Persistent: your tasks are saved to `data/joey.txt` and reloaded on startup.
 - Offline: no accounts, no network — just you and your list.
 
----
+----
 
 ## Quick start
 
@@ -29,7 +29,7 @@ time you launch him.
 > you ran the command from. Keep the JAR in the same folder each time
 > and your list will follow you around.
 
----
+----
 
 ## Features
 
@@ -55,7 +55,7 @@ The two brackets tell you at a glance:
 - **Type** — `T` = todo, `D` = deadline, `E` = event.
 - **Status** — `X` = done, blank = still to do.
 
----
+----
 
 ### Adding a todo: `todo`
 
@@ -75,7 +75,7 @@ now you have 1 tasks in the list.
 ----------------------------------------
 ```
 
----
+----
 
 ### Adding a deadline: `deadline`
 
@@ -98,7 +98,7 @@ now you have 2 tasks in the list.
 > Joey shows the date back to you in a friendly `MMM dd yyyy` format,
 > but you always type it in the standard `yyyy-mm-dd` form.
 
----
+----
 
 ### Adding an event: `event`
 
@@ -119,7 +119,7 @@ now you have 3 tasks in the list.
 ----------------------------------------
 ```
 
----
+----
 
 ### Marking a task as done: `mark`
 
@@ -140,7 +140,7 @@ Tasks marked as done:
 
 Task numbers start at **1** and match what `list` shows.
 
----
+----
 
 ### Marking a task as not done: `unmark`
 
@@ -159,7 +159,7 @@ Tasks marked as undone:
 ----------------------------------------
 ```
 
----
+----
 
 ### Deleting a task: `delete`
 
@@ -201,7 +201,7 @@ Here are the matching tasks in your list
 
 If nothing matches, Joey tells you `No matching tasks found.` instead.
 
----
+----
 
 ### Exiting: `bye`
 
@@ -229,7 +229,7 @@ file and restores your list.
 If the file is missing or unreadable, Joey starts with an empty list
 and skips any lines it can't understand.
 
----
+----
 
 ## Command summary
 
